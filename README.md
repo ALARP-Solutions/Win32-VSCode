@@ -17,18 +17,24 @@
 | Privacy URL | https://privacy.microsoft.com/privacystatement |
 | Category | Utilities & Tools |
 | Logo | See Icon.png |
-## Commands
 
-Install: Install.cmd
-Uninstall: Uninstall.cmd
+### Program
 
-## Detection Rule
+| Field | Data |
+| --- | --- |
+| Install Command | Install.cmd |
+| Uninstall Command | Uninstall.cmd |
+| Install Behaviour | System |
 
-Type:       File
-Path:       C:\Program Files\Microsoft VS Code
-File:       Code.exe
+### Detection Rules
 
-
-Key Path:   HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{EA457B21-F73E-494C-ACAB-524FDE069978}_is1
-Value:      DisplayVersion
+| Field | Data |
+| --- | --- |
+| Type | Registry |
+| Key Path | HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{EA457B21-F73E-494C-ACAB-524FDE069978}_is1 |
+| Value Name | DisplayVersion |
+| Detection Method | Version Comparison |
+| Operator | Equals |
+| Value | _X.Y.Z_ |
+| Associated with a 32-bit App | No |
 
