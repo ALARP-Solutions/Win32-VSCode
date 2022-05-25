@@ -31,19 +31,28 @@ New-Item -Path "$PSScriptRoot" -Name "temp" -ItemType "directory" | Out-Null
 ## ------------------------------ ##
 
 # Copy-item -Force -Recurse "$PSScriptRoot\Inputs\*" -Destination "$PSScriptRoot\temp"
+### OLD WAY
+#$installcmd = "VSCodeSetup-x64-$vers.exe /verysilent /norestart /mergetasks=!runcode"
+#$installcmd | Out-File -Encoding "UTF8" "$PSScriptRoot\temp\Install.cmd"
 
-$installcmd = 'VSCodeSetup-x64-' + $vers + '.exe /verysilent /norestart /mergetasks=!runcode' #/log="%temp%\VSCodeInstall.log"'
-$installcmd | Out-File "$PSScriptRoot\temp\Install.cmd"
+$installcmd = 'start /w "" "%~dp0VSCodeSetup-x64-' + $vers + '.exe" /verysilent /norestart /mergetasks=!runcode'
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+[System.IO.File]::WriteAllLines("$PSScriptRoot\temp\Install.cmd", $installcmd, $Utf8NoBomEncoding)
+
+
+#$uninstallcmd = '"C:\Program Files\Microsoft VS Code\unins000.exe" /verysilent /norestart'
+#$uninstallcmd | Out-File -Encoding "UTF8" "$PSScriptRoot\temp\Uninstall.cmd"
 
 $uninstallcmd = '"C:\Program Files\Microsoft VS Code\unins000.exe" /verysilent /norestart'
-$uninstallcmd | Out-File "$PSScriptRoot\temp\Uninstall.cmd"
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+[System.IO.File]::WriteAllLines("$PSScriptRoot\temp\Uninstall.cmd", $uninstallcmd, $Utf8NoBomEncoding)
 
 ## ------------------------------ ##
 ## Download VSCode
 ## ------------------------------ ##
 
 $url = "https://update.code.visualstudio.com/$vers/win32-x64/stable"
-$filepath = "$temppath\VSCodeSetup-x64-" + $vers + ".exe"
+$filepath = "$temppath\VSCodeSetup-x64-$vers.exe"
 
 $wc = New-Object System.Net.WebClient
 $wc.DownloadFile($url, $filepath)
@@ -51,12 +60,11 @@ $wc.DownloadFile($url, $filepath)
 ## ------------------------------ ##
 ## Build the Intunewin File
 ## ------------------------------ ##
-$Testpath = "$buildpath\VSCodeSetup-x64-" + $vers + ".exe"
+$Testpath = "$buildpath\VSCodeSetup-x64-$vers.exe"
 if (Test-Path $Testpath) {
     Remove-Item $Testpath
 }
 
-#$dest = (new-object system.io.directoryinfo $PSScriptRoot).parent.fullname
 & "$PSScriptRoot\Microsoft Win32 Content Prep Tool\IntuneWinAppUtil.exe" -c "$temppath" -s "$filepath" -o "$buildpath"
 
 ## ------------------------------ ##
