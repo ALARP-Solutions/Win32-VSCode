@@ -30,18 +30,9 @@ New-Item -Path "$PSScriptRoot" -Name "temp" -ItemType "directory" | Out-Null
 ## Copy Inputs into Temp Folder
 ## ------------------------------ ##
 
-# Copy-item -Force -Recurse "$PSScriptRoot\Inputs\*" -Destination "$PSScriptRoot\temp"
-### OLD WAY
-#$installcmd = "VSCodeSetup-x64-$vers.exe /verysilent /norestart /mergetasks=!runcode"
-#$installcmd | Out-File -Encoding "UTF8" "$PSScriptRoot\temp\Install.cmd"
-
 $installcmd = 'start /w "" "%~dp0VSCodeSetup-x64-' + $vers + '.exe" /verysilent /norestart /mergetasks=!runcode'
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines("$PSScriptRoot\temp\Install.cmd", $installcmd, $Utf8NoBomEncoding)
-
-
-#$uninstallcmd = '"C:\Program Files\Microsoft VS Code\unins000.exe" /verysilent /norestart'
-#$uninstallcmd | Out-File -Encoding "UTF8" "$PSScriptRoot\temp\Uninstall.cmd"
 
 $uninstallcmd = '"C:\Program Files\Microsoft VS Code\unins000.exe" /verysilent /norestart'
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
@@ -60,7 +51,7 @@ $wc.DownloadFile($url, $filepath)
 ## ------------------------------ ##
 ## Build the Intunewin File
 ## ------------------------------ ##
-$Testpath = "$buildpath\VSCodeSetup-x64-$vers.exe"
+$Testpath = "$buildpath\VSCodeSetup-x64-$vers.intunewin"
 if (Test-Path $Testpath) {
     Remove-Item $Testpath
 }
