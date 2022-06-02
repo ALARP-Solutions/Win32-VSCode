@@ -1,9 +1,19 @@
 Param(
     [Parameter(Mandatory=$false)]
-    [Switch]$Testing
-)
+    [Switch]$Testing,
 
-$vers = '1.67.2' #Read-Host -Prompt "Enter VSCode Version"
+    [Parameter(Mandatory=$false)]
+    [Alias("V","Version")]
+    [ValidateScript({
+        If ($_ -match '^\d+\.\d+\.\d+$') {
+          $True
+        }
+        else {
+          Throw "$_ is either not a valid version number or in the correct format."
+        }
+      })]
+    [string]$vers = '1.67.2'
+)
 
 ## ------------------------------ ##
 ## Create Build Folder
